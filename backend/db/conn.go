@@ -1,26 +1,32 @@
 package db
 
 import (
-	"database/sql"
-	"log"
+	"fmt"
 
-	_ "github.com/go-sql-driver/mysql"
+	"gorm.io/driver/mysql" // Import MySQL driver
+	"gorm.io/gorm"
 )
 
-// ConexionDB inicializa la conexión a la base de datos local
-func ConexionDB() (*sql.DB, error) {
-	Driver := "mysql"
-	Usuario := "root"
-	Contraseña := ""
-	Nombre := "invent2"
+type Config struct {
+	Host     string
+	Port     string
+	User     string
+	Password string
+	DBName   string
+}
 
-	// instruccion
-	conexion, err := sql.Open(Driver, Usuario+":"+Contraseña+"@tcp(127.0.0.1)/"+Nombre)
+var DB *gorm.DB
 
+func InitDB(cfg Config) {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DBName)
+
+	// Open a connection to the MySQL database
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
-	log.Println("Database is running")
-	return conexion, nil
+	fmt.Println("Connected to MySQL database")
+
+	DB = db
 }

@@ -12,16 +12,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// The string "my_secret_key" is just an example and should be replaced with a secret key of sufficient length and complexity in a real-world scenario.
-
 func Login(c *gin.Context) {
 
 	jwtKey := os.Getenv("JWT_SECRET")
 	if jwtKey == "" {
 		log.Fatal("Not set the key")
 	}
-
-	conexionEsta, _ := db.ConexionDB()
 
 	var user models.Usuario
 
@@ -32,10 +28,7 @@ func Login(c *gin.Context) {
 
 	var existingUser models.Usuario
 
-	query := "SELECT * FROM users WHERE email = ? LIMIT 1"
-	stmt, _ := conexionEsta.Prepare(query)
-
-	stmt.QueryRow(user.NombreUsuario).Scan(&existingUser)
+	db.DB.Where("NombreUsuario = ?", user.NombreUsuario).First(&existingUser)
 
 	if existingUser.EmpleadoID == 0 {
 		c.JSON(400, gin.H{"error": "user does not exist"})
