@@ -10,5 +10,5 @@ import { LoginComponent } from "./login/login.component";
     imports: [RouterOutlet, LoginComponent]
 })
 export class AppComponent {
-  title = 'interfaz';
+  title = 'Invent2';
 }
