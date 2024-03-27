@@ -21,7 +21,7 @@ export class LoginComponent{
   }
 
   onLogin(){
-    this.http.post('',this.loginObj).subscribe((res:any)=>{
+    this.http.post('http://localhost:8080/login',this.loginObj).subscribe((res:any)=>{
       if(res.result){
         alert("Login success")
         localStorage.setItem('angular17token',res.data.token)
@@ -31,14 +31,13 @@ export class LoginComponent{
       }
     })
   }
- 
 }
 export class Login{
-  EmailId: string;
+  UserId: string;
   Password:string;
 
   constructor(){
-    this.EmailId ='';
+    this.UserId ='';
     this.Password ="";
   }
 }
